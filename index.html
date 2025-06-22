@@ -43,7 +43,7 @@
 
 
         <!-- Navbar & Hero Start -->
-        <div class="container-xxl position-relative p-0" id="Drive stepper motors">
+        <div class="container-xxl position-relative p-0" id="Drive-stepper-motors">
             <nav class="navbar navbar-expand-lg navbar-light px-4 px-lg-5 py-3 py-lg-0">
                 <a href="" class="navbar-brand p-0">
                     <h1 class="m-0">SLA 3D printer</h1>
@@ -54,9 +54,9 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarCollapse">
                     <div class="navbar-nav mx-auto py-0">
-                        <a href="#Drive stepper motors" class="nav-item nav-link active">Stepper motor</a>
-                        <a href="#Check UV light" class="nav-item nav-link">UV light</a>
-                        <a href="#Print SL1" class="nav-item nav-link">Print SL1</a>
+                        <a href="#Drive-stepper-motors" class="nav-item nav-link active">Stepper motor</a>
+                        <a href="#Check-UV-light" class="nav-item nav-link">UV light</a>
+                        <a href="#Print-SL1" class="nav-item nav-link">Print SL1</a>
 
                     </div>
                    
@@ -64,63 +64,94 @@
             </nav>
 
             <div class="container-xxl bg-primary hero-header">
-                <div class="container">
-                    <div class="row g-5 align-items-center">
-                        <div class="col-lg-6 text-center text-lg-start">
-                            <h1 class="text-white mb-4 animated slideInDown">Stepper motor control page</h1>
-                            <p class="text-white pb-3 animated slideInDown">Move up or down, move home.</p>
-                            <div class="position-relative w-100 mt-3">
-                                <input class="form-control border-0 rounded-pill w-100 ps-4 pe-5" type="text" placeholder="[mm]" style="height: 58px;">
-                                <button type="button" class="btn btn-primary rounded-pill py-2 px-3 shadow-none position-absolute top-0 end-0 m-2">UP</button>
-                            </div>
-                            <div class="position-relative w-100 mt-3">
-                                <input class="form-control border-0 rounded-pill w-100 ps-4 pe-5" type="text" placeholder="[mm]" style="height: 58px;">
-                                <button type="button" class="btn btn-primary rounded-pill py-2 px-3 shadow-none position-absolute top-0 end-0 m-2">DOWN</button>
-                            </div>
-                            <div class="position-relative w-100 mt-3">
-                               
-                                <button type="button" class="btn btn-primary rounded-pill py-2 px-3 shadow-none position-absolute top-0 end-0 m-2">Go home</button>
-                            </div>
+            <div class="container">
+                <div class="row g-5 align-items-center">
+                <div class="col-lg-6 text-center text-lg-start">
+                    <h1 class="text-white mb-4 animated slideInDown">Stepper motor control page</h1>
+                    <p class="text-white pb-3 animated slideInDown">Enter millimeters to move, then click a direction.</p>
+
+                    <!-- Movement input and direction buttons -->
+                    <form action="/move" method="post">
+                    <div class="mb-3">
+                        <input type="number" name="z_steps" class="form-control rounded-pill" placeholder="Movement in mm" required>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-6 d-grid">
+                        <button type="submit" name="direction" value="up" class="btn btn-light rounded-pill px-4">↑ UP</button>
                         </div>
-                        <div class="col-lg-6 text-center text-lg-start">
-                            <img class="img-fluid rounded animated zoomIn" src="img/hero.jpg" alt="">
+                        <div class="col-6 d-grid">
+                        <button type="submit" name="direction" value="down" class="btn btn-light rounded-pill px-4">↓ DOWN</button>
                         </div>
                     </div>
+
+                    <div class="row mt-3">
+                        <div class="col-6 d-grid">
+                        <button type="submit" name="direction" value="set_zero" class="btn btn-outline-light rounded-pill px-4">Set New Zero</button>
+                        </div>
+                        <div class="col-6 d-grid">
+                        <button type="submit" name="direction" value="home" class="btn btn-outline-light rounded-pill px-4">Go Home</button>
+                        </div>
+                    </div>
+                    </form>
+                </div>
+
+                <div class="col-lg-6 text-center text-lg-start">
+                    <img class="img-fluid rounded animated zoomIn" src="img/hero.jpg" alt="">
+                </div>
                 </div>
             </div>
-        </div>
+            </div>
+
+
+
+
         <!-- Navbar & Hero End -->
 
 
         <!-- UV Start -->
-        <div class="container-xxl py-6" id="Check UV light">
+            <div class="container-xxl py-6" id="Check-UV-light">
             <div class="container">
-                <h1 class="m-0">UV and LCD checker</h1>
+                <h1 class="m-0 mb-4">UV and LCD Checker</h1>
                 <div class="row g-4">
-                    <div class="col-lg-4 wow fadeInUp" data-wow-delay="0.1s">
-                        <div class="feature-item bg-light rounded text-center p-5">
-                            <img src="img/chessboard.jpg" alt="Chessboard pattern" class="mb-4" style="width: 64px; height: 64px;">
-                            <h5 class="mb-3">Chessboard pattern</h5>
-                            <p class="m-0">Check your printer after pushing</p>
-                        </div>
+
+                <div class="col-lg-4">
+                    <form action="/uv" method="post">
+                    <input type="hidden" name="pattern" value="chessboard">
+                    <div class="feature-item bg-light rounded text-center p-5">
+                        <img src="img/chessboard.jpg" alt="Chessboard pattern" class="mb-4" style="width: 64px; height: 64px;">
+                        <h5 class="mb-3">Chessboard Pattern</h5>
+                        <button type="submit" class="btn btn-primary">Activate</button>
                     </div>
-                    <div class="col-lg-4 wow fadeInUp" data-wow-delay="0.3s">
-                        <div class="feature-item bg-light rounded text-center p-5">
-                            <img src="img/Black_square.jpg" alt="Chessboard pattern" class="mb-4" style="width: 64px; height: 64px;">
-                            <h5 class="mb-3">Black center</h5>
-                            <p class="m-0">Check your printer after pushing</p>
-                        </div>
+                    </form>
+                </div>
+
+                <div class="col-lg-4">
+                    <form action="/uv" method="post">
+                    <input type="hidden" name="pattern" value="black">
+                    <div class="feature-item bg-light rounded text-center p-5">
+                        <img src="img/Black_square.jpg" alt="Black center" class="mb-4" style="width: 64px; height: 64px;">
+                        <h5 class="mb-3">Black Center</h5>
+                        <button type="submit" class="btn btn-primary">Activate</button>
                     </div>
-                    <div class="col-lg-4 wow fadeInUp" data-wow-delay="0.5s">
-                        <div class="feature-item bg-light rounded text-center p-5">
-                            <img src="img/White_square.jpg" alt="Chessboard pattern" class="mb-4" style="width: 64px; height: 64px;">
-                            <h5 class="mb-3">Shiny center</h5>
-                            <p class="m-0">Check your printer after pushing</p>
-                        </div>
+                    </form>
+                </div>
+
+                <div class="col-lg-4">
+                    <form action="/uv" method="post">
+                    <input type="hidden" name="pattern" value="white">
+                    <div class="feature-item bg-light rounded text-center p-5">
+                        <img src="img/White_square.jpg" alt="White center" class="mb-4" style="width: 64px; height: 64px;">
+                        <h5 class="mb-3">Shiny Center</h5>
+                        <button type="submit" class="btn btn-primary">Activate</button>
                     </div>
+                    </form>
+                </div>
+
                 </div>
             </div>
-        </div>
+            </div>
+
         
 
 
@@ -129,40 +160,42 @@
 
 
         <!-- Print SL1 Start -->
-        <div class="container-xxl bg-light my-6 py-5" id="Print SL1">
-            <div class="container">
-                <div class="row g-5 py-5 align-items-center">
-                    <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.1s">
-                        <img class="img-fluid rounded" src="img/about.jpg">
-                    </div>
-                    <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.5s">
-                        <div class="mb-4">
-                            <h1 class="mb-2">Add a file to print</h1>
-                            <span class="bg-primary d-block my-2" style="width: 30px; height: 2px;"></span>
-                            <h5 class="mb-2">Note: SL1 format from PrusaSlicer</h5>
-                            <label for="fileUpload" class="form-label">Upload your SL1 archive:</label>
-                            <input type="file" id="fileUpload" name="fileUpload" accept="*/*" class="form-control">
-                        </div>
+        <div class="container-xxl bg-light my-6 py-5" id="Print-SL1">
+        <div class="container">
+            <div class="row g-5 py-5 align-items-center">
+            <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.1s">
+                <img class="img-fluid rounded" src="img/about.jpg" alt="3D printer image">
+            </div>
+            <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.5s">
+                <div class="mb-4">
+                <h1 class="mb-2">Add a file to print</h1>
+                <span class="bg-primary d-block my-2" style="width: 30px; height: 2px;"></span>
+                <h5 class="mb-2">Note: SL1 format from PrusaSlicer</h5>
 
-                        
-                    </div>
+                <form action="/upload" method="post" enctype="multipart/form-data">
+                    <label for="fileUpload" class="form-label">Upload your SL1 archive:</label>
+                    <input type="file" id="fileUpload" name="file" accept=".sl1" class="form-control mb-3" required>
+                    <button type="submit" class="btn btn-primary rounded-pill px-4">Upload</button>
+                </form>
                 </div>
-                <div class="row g-5 py-5 align-items-center flex-column-reverse flex-lg-row">
-                    <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.5s">
-                        <div class="d-flex align-items-center mb-4">
-                            <h1 class="mb-0">PROGRESS TRACKING</h1>
-                            <span class="bg-primary mx-2" style="width: 30px; height: 2px;"></span>
-                            <h5 class="mb-0">0%</h5>
-                        </div>
-                        
-                    </div>
-                    <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.1s">
-                        <img class="img-fluid rounded" src="img/shape.png">
-                    </div>
+            </div>
+            </div>
+
+            <div class="row g-5 py-5 align-items-center flex-column-reverse flex-lg-row">
+            <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.5s">
+                <div class="d-flex align-items-center mb-4">
+                <h1 class="mb-0">PROGRESS TRACKING</h1>
+                <span class="bg-primary mx-2" style="width: 30px; height: 2px;"></span>
+                <h5 class="mb-0">0%</h5> <!-- This can be dynamically updated later -->
                 </div>
-                
+            </div>
+            <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.1s">
+                <img class="img-fluid rounded" src="img/shape.png" alt="Progress visual">
+            </div>
             </div>
         </div>
+        </div>
+
         <!-- Print SL1 End -->
 
 
