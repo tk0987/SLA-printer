@@ -11,6 +11,8 @@ import json
 import time
 from tkinter import Tk, Label
 from PIL import Image, ImageTk
+import SLAprinter as pr
+
 # =======================++++++++++++++++++================
 # 
 #                           config read, param extraction
@@ -57,11 +59,15 @@ def show_images():
     # If all layers are done, exit
     if state["index"] >= len(image_files):
         root.destroy()
+        pr.move_z_axis(float(100))
         return
 
     if state["show_black"]:
         # Display black screen
         label.config(image='', bg='black')
+        pr.move_z_axis(float(10))
+        time.sleep(0.5)
+        pr.move_z_axis(float(-(10-layerHeight)))
         label.image = None
         state["show_black"] = False
         # Wait 10 seconds before next layer
