@@ -2,7 +2,7 @@ from flask import request, redirect
 from werkzeug.utils import secure_filename
 import zipfile
 import subprocess
-from lcd_handler import *
+from lcd_control import *
 
 UPLOAD_FOLDER = '/home/tk/Desktop/slicer'
 ALLOWED_EXTENSIONS = {'sl1'}
