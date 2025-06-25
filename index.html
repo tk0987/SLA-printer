@@ -57,6 +57,7 @@
                         <a href="#Drive-stepper-motors" class="nav-item nav-link active">Stepper motor</a>
                         <a href="#Check-UV-light" class="nav-item nav-link">UV light</a>
                         <a href="#Print-SL1" class="nav-item nav-link">Print SL1</a>
+                        <a href="#New-network-credentials" class="nav-item nav-link">Change/connect to new WiFi</a>
 
                     </div>
                    
@@ -198,7 +199,43 @@
 
         <!-- Print SL1 End -->
 
+        <!-- wifi credentials edit or add-->
+        
+        <div class="container-xxl bg-light my-6 py-5" id="New-network-credentials"></div>
+            <div class="container-xxl bg-primary hero-header">
+            <div class="container">
+                <div class="row g-5 align-items-center">
+                <div class="col-lg-6 text-center text-lg-start">
+                    <h1 class="text-white mb-4 animated slideInDown">Add your WiFi credentials</h1>
+                    <p class="text-white pb-3 animated slideInDown">Network name and password.<br>You can store only one network data at time.</p>
 
+                    <!-- Movement input and direction buttons -->
+                    <form action="/add" method="post">
+                    <div class="mb-3">
+                        <input type="text" name="ssid" class="form-control rounded-pill" placeholder="SSID" required>
+                        <input type="password" name="password" class="form-control rounded-pill" placeholder="Password" required>
+
+                    </div>
+
+                    <div class="row">
+                        <div class="col-6 d-grid">
+                        <button type="submit" name="wifi" value="creds" class="btn btn-light rounded-pill px-4">ADD WiFi credentials</button>
+
+                        </div>
+                
+                    </div>
+
+                    
+                    </form>
+                </div>
+
+                <div class="col-lg-6 text-center text-lg-start">
+                    <img class="img-fluid rounded animated zoomIn" src="img/download.png" alt="">
+                </div>
+                </div>
+            </div>
+            </div>
+            </div>
 
 
  
