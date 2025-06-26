@@ -1,264 +1,145 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="utf-8">
-    <title>3D SLA printer</title>
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <meta content="" name="keywords">
-    <meta content="" name="description">
+  <meta charset="utf-8">
+  <title>3D SLA Printer Control Panel</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #f2f2f2;
+      margin: 0;
+      padding: 1rem;
+    }
 
-    <!-- Favicon -->
-    <link href="img/ico.jpg" rel="icon">
+    h1, h2 {
+      text-align: center;
+    }
 
-    <!-- Google Web Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700&display=swap" rel="stylesheet"> 
+    nav {
+      background: #343a40;
+      padding: 1rem;
+      color: #fff;
+    }
 
-    <!-- Icon Font Stylesheet -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+    nav ul {
+      list-style: none;
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      padding: 0;
+      margin: 0;
+    }
 
-    <!-- Libraries Stylesheet -->
-    <link href="lib/animate/animate.min.css" rel="stylesheet">
-    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+    }
 
-    <!-- Customized Bootstrap Stylesheet -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
+    .container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
 
-    <!-- Template Stylesheet -->
-    <link href="css/style.css" rel="stylesheet">
+    .card {
+      background: white;
+      padding: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .card form {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    input, button {
+      padding: 0.5rem;
+      font-size: 1rem;
+    }
+
+    button {
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #0056b3;
+    }
+
+    label {
+      font-weight: bold;
+    }
+  </style>
 </head>
-
 <body>
-    <div class="container-xxl bg-white p-0">
-        <!-- Spinner Start -->
-        <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
-            <div class="spinner-grow text-primary" style="width: 3rem; height: 3rem;" role="status">
-                <span class="sr-only">Loading...</span>
-            </div>
-        </div>
-        <!-- Spinner End -->
 
+  <nav>
+    <h1>SLA 3D Printer Control</h1>
+    <p style="text-align: center;">3D Printer control page</p>
+  </nav>
 
-        <!-- Navbar & Hero Start -->
-        <div class="container-xxl position-relative p-0" id="Drive-stepper-motors">
-            <nav class="navbar navbar-expand-lg navbar-light px-4 px-lg-5 py-3 py-lg-0">
-                <a href="" class="navbar-brand p-0">
-                    <h1 class="m-0">SLA 3D printer</h1>
-                    <!-- <img src="img/logo.png" alt="Logo"> -->
-                </a>
-                <button class="navbar-toggler rounded-pill" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarCollapse">
-                    <div class="navbar-nav mx-auto py-0">
-                        <a href="#Drive-stepper-motors" class="nav-item nav-link active">Stepper motor</a>
-                        <a href="#Check-UV-light" class="nav-item nav-link">UV light</a>
-                        <a href="#Print-SL1" class="nav-item nav-link">Print SL1</a>
-                        <a href="#New-network-credentials" class="nav-item nav-link">Change/connect to new WiFi</a>
+  <div class="container">
 
-                    </div>
-                   
-                </div>
-            </nav>
-
-            <div class="container-xxl bg-primary hero-header">
-            <div class="container">
-                <div class="row g-5 align-items-center">
-                <div class="col-lg-6 text-center text-lg-start">
-                    <h1 class="text-white mb-4 animated slideInDown">Stepper motor control page</h1>
-                    <p class="text-white pb-3 animated slideInDown">Enter millimeters to move, then click a direction.</p>
-
-                    <!-- Movement input and direction buttons -->
-                    <form action="/move" method="post">
-                    <div class="mb-3">
-                        <input type="number" name="z_steps" class="form-control rounded-pill" placeholder="Movement in mm" required>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-6 d-grid">
-                        <button type="submit" name="direction" value="up" class="btn btn-light rounded-pill px-4">↑ UP</button>
-                        </div>
-                        <div class="col-6 d-grid">
-                        <button type="submit" name="direction" value="down" class="btn btn-light rounded-pill px-4">↓ DOWN</button>
-                        </div>
-                    </div>
-
-                    <div class="row mt-3">
-                        <div class="col-6 d-grid">
-                        <button type="submit" name="direction" value="set_zero" class="btn btn-outline-light rounded-pill px-4">Set New Zero</button>
-                        </div>
-                        <div class="col-6 d-grid">
-                        <button type="submit" name="direction" value="home" class="btn btn-outline-light rounded-pill px-4">Go Home</button>
-                        </div>
-                    </div>
-                    </form>
-                </div>
-
-                <div class="col-lg-6 text-center text-lg-start">
-                    <img class="img-fluid rounded animated zoomIn" src="img/hero.jpg" alt="">
-                </div>
-                </div>
-            </div>
-            </div>
-
-
-
-
-        <!-- Navbar & Hero End -->
-
-
-        <!-- UV Start -->
-            <div class="container-xxl py-6" id="Check-UV-light">
-            <div class="container">
-                <h1 class="m-0 mb-4">UV and LCD Checker</h1>
-                <div class="row g-4">
-
-                <div class="col-lg-4">
-                    <form action="/uv" method="post">
-                    <input type="hidden" name="pattern" value="chessboard">
-                    <div class="feature-item bg-light rounded text-center p-5">
-                        <img src="img/chessboard.jpg" alt="Chessboard pattern" class="mb-4" style="width: 64px; height: 64px;">
-                        <h5 class="mb-3">Chessboard Pattern</h5>
-                        <button type="submit" class="btn btn-primary">Activate</button>
-                    </div>
-                    </form>
-                </div>
-
-                <div class="col-lg-4">
-                    <form action="/uv" method="post">
-                    <input type="hidden" name="pattern" value="black">
-                    <div class="feature-item bg-light rounded text-center p-5">
-                        <img src="img/Black_square.jpg" alt="Black center" class="mb-4" style="width: 64px; height: 64px;">
-                        <h5 class="mb-3">Black Center</h5>
-                        <button type="submit" class="btn btn-primary">Activate</button>
-                    </div>
-                    </form>
-                </div>
-
-                <div class="col-lg-4">
-                    <form action="/uv" method="post">
-                    <input type="hidden" name="pattern" value="white">
-                    <div class="feature-item bg-light rounded text-center p-5">
-                        <img src="img/White_square.jpg" alt="White center" class="mb-4" style="width: 64px; height: 64px;">
-                        <h5 class="mb-3">Shiny Center</h5>
-                        <button type="submit" class="btn btn-primary">Activate</button>
-                    </div>
-                    </form>
-                </div>
-
-                </div>
-            </div>
-            </div>
-
-        
-
-
-
-        <!-- Check UV light End -->
-
-
-        <!-- Print SL1 Start -->
-        <div class="container-xxl bg-light my-6 py-5" id="Print-SL1">
-        <div class="container">
-            <div class="row g-5 py-5 align-items-center">
-            <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.1s">
-                <img class="img-fluid rounded" src="img/about.jpg" alt="3D printer image">
-            </div>
-            <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.5s">
-                <div class="mb-4">
-                <h1 class="mb-2">Add a file to print</h1>
-                <span class="bg-primary d-block my-2" style="width: 30px; height: 2px;"></span>
-                <h5 class="mb-2">Note: SL1 format from PrusaSlicer</h5>
-
-                <form action="/upload" method="post" enctype="multipart/form-data">
-                    <label for="fileUpload" class="form-label">Upload your SL1 archive:</label>
-                    <input type="file" id="fileUpload" name="file" accept=".sl1" class="form-control mb-3" required>
-                    <button type="submit" class="btn btn-primary rounded-pill px-4">Upload</button>
-                </form>
-                </div>
-            </div>
-            </div>
-
-            <div class="row g-5 py-5 align-items-center flex-column-reverse flex-lg-row">
-            <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.5s">
-                <div class="d-flex align-items-center mb-4">
-                <h1 class="mb-0">PROGRESS TRACKING</h1>
-                <span class="bg-primary mx-2" style="width: 30px; height: 2px;"></span>
-                <h5 class="mb-0">0%</h5> <!-- This can be dynamically updated later -->
-                </div>
-            </div>
-            <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.1s">
-                <img class="img-fluid rounded" src="img/shape.png" alt="Progress visual">
-            </div>
-            </div>
-        </div>
-        </div>
-
-        <!-- Print SL1 End -->
-
-        <!-- wifi credentials edit or add-->
-        
-        <div class="container-xxl bg-light my-6 py-5" id="New-network-credentials"></div>
-            <div class="container-xxl bg-primary hero-header">
-            <div class="container">
-                <div class="row g-5 align-items-center">
-                <div class="col-lg-6 text-center text-lg-start">
-                    <h1 class="text-white mb-4 animated slideInDown">Add your WiFi credentials</h1>
-                    <p class="text-white pb-3 animated slideInDown">Network name and password.<br>You can store only one network data at time.</p>
-
-                    <!-- Movement input and direction buttons -->
-                    <form action="/add" method="post">
-                    <div class="mb-3">
-                        <input type="text" name="ssid" class="form-control rounded-pill" placeholder="SSID" required>
-                        <input type="password" name="password" class="form-control rounded-pill" placeholder="Password" required>
-
-                    </div>
-
-                    <div class="row">
-                        <div class="col-6 d-grid">
-                        <button type="submit" name="wifi" value="creds" class="btn btn-light rounded-pill px-4">ADD WiFi credentials</button>
-
-                        </div>
-                
-                    </div>
-
-                    
-                    </form>
-                </div>
-
-                <div class="col-lg-6 text-center text-lg-start">
-                    <img class="img-fluid rounded animated zoomIn" src="img/download.png" alt="">
-                </div>
-                </div>
-            </div>
-            </div>
-            </div>
-
-
- 
-        
-
-
-
-
-        <!-- Back to Top -->
-        <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+    <!-- Stepper Motor -->
+    <div class="card" id="stepper">
+      <h2>Stepper Control</h2>
+      <form action="/move" method="post">
+        <input type="number" name="z_steps" placeholder="Movement in mm" required>
+        <button type="submit" name="direction" value="up">↑ UP</button>
+        <button type="submit" name="direction" value="down">↓ DOWN</button>
+        <button type="submit" name="direction" value="set_zero">Set Zero</button>
+        <button type="submit" name="direction" value="home">Go Home</button>
+      </form>
     </div>
 
-    <!-- JavaScript Libraries -->
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="lib/wow/wow.min.js"></script>
-    <script src="lib/easing/easing.min.js"></script>
-    <script src="lib/waypoints/waypoints.min.js"></script>
-    <script src="lib/counterup/counterup.min.js"></script>
-    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+    <!-- UV Display -->
+    <div class="card" id="uv">
+      <h2>UV & LCD Check</h2>
+      <form action="/uv" method="post">
+        <input type="hidden" name="pattern" value="chessboard">
+        <button type="submit">Chessboard Pattern</button><br>
+      </form>
+      <form action="/uv" method="post">
+        <input type="hidden" name="pattern" value="black">
+        <button type="submit">Black Center</button><br>
+      </form>
+      <form action="/uv" method="post">
+        <input type="hidden" name="pattern" value="white">
+        <button type="submit">Shiny Center</button><br>
+      </form>
+    </div>
 
-    <!-- Template Javascript -->
-    <script src="js/main.js"></script>
+    <!-- Upload SL1 -->
+    <div class="card" id="upload">
+      <h2>Upload SL1 File</h2>
+      <form action="/upload" method="post" enctype="multipart/form-data">
+        <label for="fileUpload">SL1 file:</label>
+        <input type="file" name="file" accept=".sl1" required>
+        <button type="submit">Upload</button>
+      </form>
+      <h3>Progress</h3>
+      <p>0%</p>
+    </div>
+
+    <!-- WiFi Config -->
+    <div class="card" id="wifi">
+      <h2>WiFi Settings</h2>
+      <form action="/add" method="post">
+        <input type="text" name="ssid" placeholder="WiFi SSID" required>
+        <input type="password" name="password" placeholder="WiFi Password" required>
+        <button type="submit" name="wifi" value="creds">Save Network</button>
+      </form>
+    </div>
+
+  </div>
+
 </body>
-
 </html>
