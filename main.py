@@ -15,10 +15,10 @@ import RPi.GPIO as GPIO
 # -----------------------------
 # Configuration
 # -----------------------------
-UPLOAD_FOLDER = '/home/tk/Desktop/slicer'
+UPLOAD_FOLDER = '/home/Documents/3dPrinter'
 ALLOWED_EXTENSIONS = {'sl1'}
-CONFIG_PATH = os.path.join(UPLOAD_FOLDER, 'Unnamed-Sphere', 'config.json')
-IMAGE_DIR = os.path.join(UPLOAD_FOLDER, 'Unnamed-Sphere')
+CONFIG_PATH = os.path.join(UPLOAD_FOLDER,  'config.json')
+IMAGE_DIR = os.path.join(UPLOAD_FOLDER, 'img')
 STEPS_PER_MM = 100
 
 # -----------------------------
