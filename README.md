@@ -10,6 +10,6 @@ as an UV screen i'll use 7 inch LCD screen without back (a'la mono!), 1024x600 p
 3, 2, 1... start
 
 basic motor and gui connection added. next:
-1. refine motor control code,
-2. drive lcd for printing,
-3. check it all and refine if needed
+1. refine motor control code -done
+2. drive lcd for printing - done
+3. check it all and refine if needed - in progress. It will (probably) be ready tommorow.
