@@ -15,10 +15,10 @@ import RPi.GPIO as GPIO
 # -----------------------------
 # Configuration
 # -----------------------------
-UPLOAD_FOLDER = '/home/Documents/3dPrinter'
+UPLOAD_FOLDER = '/home/tk/Desktop/slicer'
 ALLOWED_EXTENSIONS = {'sl1'}
-CONFIG_PATH = os.path.join(UPLOAD_FOLDER,  'config.json')
-IMAGE_DIR = os.path.join(UPLOAD_FOLDER, 'img')
+CONFIG_PATH = os.path.join(UPLOAD_FOLDER, 'Unnamed-Sphere', 'config.json')
+IMAGE_DIR = os.path.join(UPLOAD_FOLDER, 'Unnamed-Sphere')
 STEPS_PER_MM = 100
 
 # -----------------------------
@@ -167,6 +167,27 @@ def start_preview():
 
     show_images()
     root.mainloop()
+def show_uv_pattern(pattern_file, duration=10):
+    def display():
+        root = Tk()
+        root.attributes('-fullscreen', True)
+        root.configure(background='black')
+        label = Label(root, bg='black')
+        label.pack(expand=True)
+
+        try:
+            uv_on()
+            img = Image.open(pattern_file)
+            photo = ImageTk.PhotoImage(img)
+            label.config(image=photo)
+            label.image = photo
+        except Exception as e:
+            print(f"Failed to display {pattern_file}: {e}")
+        finally:
+            root.after(duration * 1000, lambda: [uv_off(), root.destroy()])
+            root.mainloop()
+
+    threading.Thread(target=display, daemon=True).start()
 
 # -----------------------------
 # Wi-Fi Auto Connect
@@ -220,9 +241,26 @@ def move():
     elif direction == 'home': go_home()
     elif direction == 'set_zero': set_zero()
     return redirect('/')
+@app.route('/uv', methods=['POST'])
+def uv_pattern():
+    pattern = request.form.get('pattern')
+
+    if pattern == 'black':
+        uv_off()  # Just turn off UV, no need to show image
+    elif pattern == 'white':
+        show_uv_pattern('white.jpg')
+    elif pattern == 'chessboard':
+        show_uv_pattern('black.jpg')  # Replace with actual chessboard image if different
+    else:
+        print(f"Unknown pattern: {pattern}")
+
+    return redirect('/')
+
 
 @app.route('/upload', methods=['POST'])
 def upload_file():
+    ALLOWED_EXTENSIONS = {'sl1'}
+
     file = request.files['file']
     if file and file.filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS:
         filename = secure_filename(file.filename)
