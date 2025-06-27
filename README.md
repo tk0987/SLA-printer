@@ -13,4 +13,4 @@ theres a small possibility that I'll need to remove those color filters from pix
 basic motor and gui connection added. next:
 1. refine motor control code -done
 2. drive lcd for printing - done
-3. check it all and refine if needed - in progress. It will (probably) be ready tommorow.
+3. check it all and refine if needed - in progress. It will (probably) be ready tommorow. and every day there will be tomorrow...
