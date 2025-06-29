@@ -133,8 +133,10 @@ def start_preview(path):
     root = Tk()
     root.attributes('-fullscreen', True)
     root.configure(background='black')
+
     label = Label(root, bg='black')
-    label.pack(expand=False)
+    label.place(relx=0.5, rely=0.5, anchor='center')  # Centered placement, no scaling
+
     root.bind("<Escape>", lambda e: root.attributes('-fullscreen', False))
 
     def show_images():
@@ -143,6 +145,7 @@ def start_preview(path):
             root.destroy()
             move_z_axis(100)
             return
+
         if state["show_black"]:
             uv_off()
             label.config(image='', bg='black')
@@ -155,7 +158,7 @@ def start_preview(path):
         else:
             uv_on()
             img_file = os.path.join(path, images[state["index"]])
-            img = Image.open(img_file).rotate(90)
+            img = Image.open(img_file).rotate(90, expand=False).convert('RGB')
             photo = ImageTk.PhotoImage(img)
             label.config(image=photo, bg='black')
             label.image = photo
@@ -167,6 +170,7 @@ def start_preview(path):
 
     show_images()
     root.mainloop()
+
 
 def show_uv_pattern(pattern_file, duration=10):
     def display():
