@@ -106,10 +106,11 @@ def set_zero():
 # -----------------------------
 # Image Preview Thread
 # -----------------------------
-def start_preview():
+def start_preview(path):
     global images, state
     try:
-        with open(CONFIG_PATH, 'r') as f:
+        config_path = os.path.join(path, 'config.json')
+        with open(config_path, 'r') as f:
             config = json.load(f)
     except Exception as e:
         print(f"Failed to load config.json: {e}")
@@ -121,7 +122,11 @@ def start_preview():
     delay_before = config.get("delay_before_exposure_ms", 0) / 1000.0
     delay_after = config.get("delay_after_exposure_ms", 0) / 1000.0
 
-    images = sorted(f for f in os.listdir(IMAGE_DIR) if f.endswith('.png'))
+    images = sorted(f for f in os.listdir(path) if f.endswith('.png'))
+    if not images:
+        print(f"No images found in {path}")
+        return
+
     state["index"] = 0
     state["show_black"] = False
 
@@ -130,15 +135,9 @@ def start_preview():
     root.configure(background='black')
     label = Label(root, bg='black')
     label.pack(expand=False)
-
-    def exit_fullscreen(event): 
-        root.attributes('-fullscreen', False)
-        root.bind("<Escape>", exit_fullscreen)
+    root.bind("<Escape>", lambda e: root.attributes('-fullscreen', False))
 
     def show_images():
-        
-        
-
         if state["index"] >= len(images):
             uv_off()
             root.destroy()
@@ -155,8 +154,8 @@ def start_preview():
             root.after(10000, show_images)
         else:
             uv_on()
-            path = os.path.join(IMAGE_DIR, images[state["index"]])
-            img = Image.open(path).rotate(90)
+            img_file = os.path.join(path, images[state["index"]])
+            img = Image.open(img_file).rotate(90)
             photo = ImageTk.PhotoImage(img)
             label.config(image=photo, bg='black')
             label.image = photo
@@ -168,6 +167,7 @@ def start_preview():
 
     show_images()
     root.mainloop()
+
 def show_uv_pattern(pattern_file, duration=10):
     def display():
         root = Tk()
@@ -231,7 +231,14 @@ def connect_wifi():
 # -----------------------------
 @app.route('/')
 def index():
-    return render_template('index.html')
+    folders = []
+    upload_folder = app.config['UPLOAD_FOLDER']
+
+    if os.path.exists(upload_folder):
+        folders = [name for name in os.listdir(upload_folder)
+                    if os.path.isdir(os.path.join(upload_folder, name))]
+
+    return render_template('index.html', folders=folders)
 
 @app.route('/move', methods=['POST'])
 def move():
@@ -294,7 +301,7 @@ def upload_file():
             print(f"📦 Extracted SL1 contents to: {extract_dir}")
             
             # Start preview as a daemon thread
-            threading.Thread(target=start_preview, daemon=True).start()
+            threading.Thread(target=start_preview, args=(extract_dir,), daemon=True).start()
 
         except Exception as e:
             print(f"❌ Failed to extract or preview: {e}")
@@ -349,16 +356,7 @@ def start_print():
         return redirect('/')
     except Exception as e:
         return f"Error starting print: {e}", 500
-@app.route('/')
-def index():
-    folders = []
-    upload_folder = app.config['UPLOAD_FOLDER']
 
-    if os.path.exists(upload_folder):
-        folders = [name for name in os.listdir(upload_folder)
-                    if os.path.isdir(os.path.join(upload_folder, name))]
-
-    return render_template('index.html', folders=folders)
 
 
 # -----------------------------
