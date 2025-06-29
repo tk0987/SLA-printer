@@ -1,3 +1,4 @@
+
 # Unified SLA Printer Controller for Raspberry Pi Zero W
 
 import os
@@ -11,14 +12,14 @@ from werkzeug.utils import secure_filename
 from tkinter import Tk, Label
 from PIL import Image, ImageTk
 import RPi.GPIO as GPIO
-
+#os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 # -----------------------------
 # Configuration
 # -----------------------------
-UPLOAD_FOLDER = '/home/tk/Desktop/slicer'
+UPLOAD_FOLDER = '/home/threedeprinter/Documents/3dPrinter/dwnld'
 ALLOWED_EXTENSIONS = {'sl1'}
-CONFIG_PATH = os.path.join(UPLOAD_FOLDER, 'Unnamed-Sphere', 'config.json')
-IMAGE_DIR = os.path.join(UPLOAD_FOLDER, 'Unnamed-Sphere')
+CONFIG_PATH = os.path.join(UPLOAD_FOLDER, 'config.json')
+IMAGE_DIR = os.path.join(UPLOAD_FOLDER,'img')
 STEPS_PER_MM = 100
 
 # -----------------------------
@@ -259,19 +260,50 @@ def uv_pattern():
 
 @app.route('/upload', methods=['POST'])
 def upload_file():
-    ALLOWED_EXTENSIONS = {'sl1'}
+    from werkzeug.utils import secure_filename
+    import zipfile
+
+    upload_folder = app.config['UPLOAD_FOLDER']
+    os.makedirs(upload_folder, exist_ok=True)
+
+    if 'file' not in request.files:
+        print("❌ No file part in request.")
+        return "No file uploaded", 400
 
     file = request.files['file']
-    if file and file.filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS:
-        filename = secure_filename(file.filename)
-        sl1_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-        file.save(sl1_path)
-        extract_path = os.path.join(app.config['UPLOAD_FOLDER'], 'Unnamed-Sphere')
-        with zipfile.ZipFile(sl1_path, 'r') as zip_ref:
-            zip_ref.extractall(extract_path)
-        threading.Thread(target=start_preview, daemon=True).start()
-        return redirect('/')
-    return "Invalid file", 400
+    if file.filename == '':
+        print("⚠️ Empty filename.")
+        return "No file selected", 400
+
+    filename = secure_filename(file.filename)
+    save_path = os.path.join(upload_folder, filename)
+
+    try:
+        file.save(save_path)
+        print(f"✅ File '{filename}' uploaded to {save_path}")
+    except Exception as e:
+        print(f"❌ Failed to save file: {e}")
+        return "Failed to save", 500
+
+    # Unzip if it's a .sl1 file (usually a ZIP archive)
+    if filename.lower().endswith('.sl1') and zipfile.is_zipfile(save_path):
+        extract_dir = os.path.join(upload_folder, os.path.splitext(filename)[0] + '_extracted')
+        try:
+            with zipfile.ZipFile(save_path, 'r') as zip_ref:
+                zip_ref.extractall(extract_dir)
+            print(f"📦 Extracted SL1 contents to: {extract_dir}")
+            
+            # Start preview as a daemon thread
+            threading.Thread(target=start_preview, daemon=True).start()
+
+        except Exception as e:
+            print(f"❌ Failed to extract or preview: {e}")
+            return "SL1 unzip error", 500
+    else:
+        print("ℹ️ Uploaded file is not an SL1 (ZIP) — skipping extraction.")
+
+    return redirect('/')
+
 
 @app.route('/add', methods=['POST'])
 def add_wifi():
@@ -303,6 +335,30 @@ def progress():
         total_layers=total,
         percent=int((current / total) * 100)
     )
+@app.route('/print', methods=['POST'])
+def start_print():
+    folder_name = request.form.get('folder')
+    full_path = os.path.join(app.config['UPLOAD_FOLDER'], folder_name)
+
+    if not os.path.isdir(full_path):
+        return f"❌ Folder not found: {folder_name}", 400
+
+    print(f"🖨️ Starting print from: {full_path}")
+    try:
+        threading.Thread(target=start_preview, args=(full_path,), daemon=True).start()
+        return redirect('/')
+    except Exception as e:
+        return f"Error starting print: {e}", 500
+@app.route('/')
+def index():
+    folders = []
+    upload_folder = app.config['UPLOAD_FOLDER']
+
+    if os.path.exists(upload_folder):
+        folders = [name for name in os.listdir(upload_folder)
+                    if os.path.isdir(os.path.join(upload_folder, name))]
+
+    return render_template('index.html', folders=folders)
 
 
 # -----------------------------
