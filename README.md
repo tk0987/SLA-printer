@@ -1,11 +1,9 @@
 # SLA-3D-printer
-raspberry pi zero W based SLA printer
+raspberry pi zero W based SLA printer. After creating proper library changing usb to gpio-like tool will be usable with old laptops or pc.
 
-currently only basic html gui is added.
+html gui. this SLA printer wont use other gui than this web one. It will be fully-wifi based, compatible with every web browser, including mobile.
 
-yes, html gui. this SLA printer wont use other gui than this web one. It will be fully-wifi based, compatible with every web browser, including mobile.
-
-as an UV screen i'll use 7 inch LCD screen without back (a'la mono!), 1024x600 px, which gives ~160 microns/pixel. Its HDMI screen, it works just fine with raspberry pi zero.
+as an UV screen i'll use 7 inch LCD screen without back (a'la mono!), 1024x600 px, which gives ~160 microns/pixel. Its HDMI screen, it works just fine with raspberry pi zero. And human eye (even shortsighted like mine) ar
 theres a small possibility that I'll need to remove those color filters from pixels, then replace polarizer. If so, I will leave a note here about that. Most probably my uv leds will do their work without that, but exposure time may be slightly longer than in original mono screens. we'll see.
 
 3, 2, 1... start
