@@ -1,6 +1,8 @@
 So - as in dir name - I'm building currently SLA printer on my oldest laptop.
 
 Yeah, my oldest laptop. I wrote bachelor on it, commuting in buses and trams. This Monte Carlo simulation was badass, but data processing and visualization even better... Ah. Now this thing has honor to serve as working 3D SLA printer.
+
+I tried to make it with raspberry pi zero with 7" display, but both of them were fried to death by the motor controller short circuit. I didnt know my motor needs 3 A to work, and the controler - DRV8825 - cannot withstand it. ba dum tsss...
   
     # ====================================++++++++++++++++++++++++++++++++++++++===================================
   
@@ -25,7 +27,7 @@ You 'll need also stepper motor, proper controller for it, raspberry pi pico and
 A machine uPython code is provided - here for rpi pico. But the laptop does the most important things - serving web page over your wifi.
 Main app serves a web page using FastAPI (basic control only - for now). When connected to the router, everybody in network can access the printer, everybody can control it - unless it is in printmode.
 
-Ah, printmode. Screen control is realized using tkinter - the code runs just a single windowed app, with only one label - the image to print. 
+Ah, printmode. Screen control is realized using tkinter - the code runs just a single windowed app, with only one label - the image to print. To enter it, you will need to upload a sl1 arcieve (code will extract it maually). Then FastApi sends info about available printables on the served page - html gui.
 
 After you make the printer and add this code to autostart consider small change using printmode code - when the service starts, it should turn screen black. I didn't do it because it is still in debugging phase - I simply add resin later.
 
