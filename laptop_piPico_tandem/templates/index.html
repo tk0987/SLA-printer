@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>3D SLA Printer Control Panel</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #f2f2f2;
+      margin: 0;
+      padding: 1rem;
+    }
+
+    h1, h2 {
+      text-align: center;
+    }
+
+    nav {
+      background: #343a40;
+      padding: 1rem;
+      color: #fff;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      padding: 0;
+      margin: 0;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .card {
+      background: white;
+      padding: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .card form {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    input, button {
+      padding: 0.5rem;
+      font-size: 1rem;
+    }
+
+    button {
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #0056b3;
+    }
+
+    label {
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <h1>SLA 3D Printer Control</h1>
+    <p style="text-align: center;">3D Printer control page</p>
+  </nav>
+
+  <div class="container">
+
+    <!-- Stepper Motor -->
+    <div class="card" id="stepper">
+      <h2>Stepper Control</h2>
+      <form action="/move" method="post">
+        <input type="number" name="z_steps" placeholder="Movement in mm" required min="0">
+
+        <button type="submit" name="direction" value="up">↑ UP</button>
+        <button type="submit" name="direction" value="down">↓ DOWN</button>
+        <button type="submit" name="direction" value="set_zero">Set Zero</button>
+        <button type="submit" name="direction" value="home">Go Home</button>
+      </form>
+    </div>
+
+    <!-- UV Display -->
+    <div class="card" id="uv">
+      <h2>UV & LCD Check</h2>
+      <form action="/uv" method="post">
+        <input type="hidden" name="pattern" value="chessboard">
+        <button type="submit">Chessboard Pattern</button><br>
+      </form>
+      <form action="/uv" method="post">
+        <input type="hidden" name="pattern" value="black">
+        <button type="submit">Black Center</button><br>
+      </form>
+      <form action="/uv" method="post">
+        <input type="hidden" name="pattern" value="white">
+        <button type="submit">Shiny Center</button><br>
+      </form>
+    </div>
+
+  <!-- Upload SL1 -->
+  <div class="card" id="upload">
+    <h2>Upload SL1 File</h2>
+    <form action="/upload" method="post" enctype="multipart/form-data">
+      <label for="fileUpload">SL1 file:</label>
+      <input type="file" name="files" multiple>
+
+
+      <button type="submit">Upload & Extract</button>
+    </form>
+    <p>DEBUG: {{ error }}</p>
+
+    <div id="progress">
+  {% if error %}
+    <div style="color: red; font-weight: bold;">{{ error }}</div>
+  {% else %}
+    <div>Ready to print...</div>
+  {% endif %}
+</div>
+
+
+<div>
+<h2>Select Print Job</h2>
+<select id="jobSelector">
+  <option value="">-- Choose a job --</option>
+</select>
+<button onclick="startPrint()">Start Print</button>
+
+<script>
+  fetch("/print_jobs")
+    .then(res => res.json())
+    .then(data => {
+      const selector = document.getElementById("jobSelector");
+      data.jobs.forEach(job => {
+        const option = document.createElement("option");
+        option.value = job;
+        option.textContent = job;
+        selector.appendChild(option);
+      });
+    });
+function startPrint() {
+  const selected = document.getElementById("jobSelector").value;
+  if (!selected) return alert("Please select a job.");
+
+  fetch("/print", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ path: selected })
+  })
+  .then(res => res.json())
+  .then(data => {
+    const progress = document.getElementById("progress");
+    progress.innerHTML = `<div style="color: green; font-weight: bold;">${data.message || data.error}</div>`;
+  });
+}
+
+</script>
+</div>
+    <!-- WiFi Config -->
+    <div class="card" id="wifi">
+      <h2>WiFi Settings</h2>
+      <form action="/add" method="post">
+        <input type="text" name="ssid" placeholder="WiFi SSID" required>
+        <input type="password" name="password" placeholder="WiFi Password" required>
+        <button type="submit" name="wifi" value="creds">Save Network</button>
+      </form>
+    </div>
+
+  </div>
+
+</body>
+</html>
