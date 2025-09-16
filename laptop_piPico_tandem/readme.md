@@ -4,7 +4,7 @@ Yeah, my oldest laptop. I wrote bachelor on it, commuting in buses and trams. Th
   
     # ====================================++++++++++++++++++++++++++++++++++++++===================================
   
-    # Hardware
+    #                                                   Hardware
   
     # ====================================++++++++++++++++++++++++++++++++++++++===================================
 OK. To construct such a printer software provided is not enough - you have to carefully dismantle the LCD laptop have.
@@ -18,7 +18,7 @@ You 'll need also stepper motor, proper controller for it, raspberry pi pico and
 
     # ====================================++++++++++++++++++++++++++++++++++++++===================================
   
-    # Software (this repo)
+    #                                            Software (this repo)
   
     # ====================================++++++++++++++++++++++++++++++++++++++===================================
 
@@ -31,7 +31,7 @@ Currently I'm glad it works, and I prefer simplicity and practicality over fashi
 
     # ====================================++++++++++++++++++++++++++++++++++++++===================================
   
-    # Future of this project
+    #                                            Future of this project
   
     # ====================================++++++++++++++++++++++++++++++++++++++===================================
 
