@@ -23,7 +23,7 @@ def step_motor(steps):
 
     direction = -1 if steps < 0 else 1
 
-    MOTOR_IN2.value(1 if direction > 0 else 0)
+    MOTOR_IN2.value(1 if direction > 0 else 0) # change depending on you coils wiring
     utime.sleep_us(10)
     # print(f"Direction: {'UP' if direction > 0 else 'DOWN'}")
 
