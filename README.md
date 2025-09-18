@@ -1,19 +1,14 @@
-# SLA-3D-printer
-raspberry pi zero W based SLA printer. After creating proper library changing usb to gpio-like tool will be usable with old laptops or pc.
-
-html gui. this SLA printer wont use other gui than this web one. It will be fully-wifi based, compatible with every web browser, including mobile.
-
-as an UV screen i'll use 7 inch LCD screen without back (a'la mono!), 1024x600 px, which gives ~160 microns/pixel. Its HDMI screen, it works just fine with raspberry pi zero. And human eye (even shortsighted like mine) wont see each individual pixel.
-
-theres a small possibility that I'll need to remove those color filters from pixels, then replace polarizer. If so, I will leave a note here about that. Most probably my uv leds will do their work without that, but exposure time may be slightly longer than in original mono screens. we'll see.
-
-3, 2, 1... start
-
-basic motor and gui connection added. next:
-1. refine motor control code - partially done
-2. drive lcd for printing - done
-3. check it all and refine if needed - done.
+look at the only folder inside this repo. theres everything.
 
 
-remember about permissions in the upload directory.
+I've tried to make this printer using Raspberry Pi Zero and small 7" lcd with touch. Everything was working just ok - but... I used DRV8825 for my stepper control. I didnt know, that stepper is 3 A rated, so short fried both raspberry and LCD to death.
 
+So, i made working old-laptop version. Software is in dir.
+
+What is important:
+
+# I use nylon foil for screen-resin separation. Works brilliant, and is cheap.
+
+I bought it in lidl for 4$, circa (in my country there are not $, so - circa).
+
+Nylon is good - resin wont stick to it (look at the chemical structures of both).
